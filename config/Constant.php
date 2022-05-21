@@ -20,13 +20,18 @@ class Constant
     /**
      * @var string
      */
-    private string $db = 'test_task';
+    private string $db = 'test_taska';
 
 
     /**
      * @var string
      */
     private string $OODLE_SITECODE = 'oodle';
+
+    /**
+     * @var int
+     */
+    private int $exampleUrlCount = 3;
 
     /**
      * @return string
@@ -66,5 +71,13 @@ class Constant
     public function getOODLESITECODE(): string
     {
         return $this->OODLE_SITECODE;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExampleUrlCount(): int
+    {
+        return $this->exampleUrlCount;
     }
 }

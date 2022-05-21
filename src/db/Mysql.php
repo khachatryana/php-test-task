@@ -1,6 +1,7 @@
 <?php
 
 require_once ('src/Helpers/Log.php');
+require_once ('config/Constant.php');
 class Mysql
 {
 
@@ -9,9 +10,12 @@ class Mysql
      */
     private mysqli $mysqli;
 
-    public function __construct(mysqli $mysqli)
+    private Constant $constant;
+
+    public function __construct(mysqli $mysqli, Constant $constant)
     {
         $this->mysqli = $mysqli;
+        $this->constant = $constant;
     }
 
     /**
@@ -23,7 +27,7 @@ class Mysql
 
         $sql = "select SUBSTRING_INDEX(SUBSTRING_INDEX(replace(property_url, concat(substring_index(property_url, '//', 1), '//'), ''), '/', 1), '?', 1) as host,
   count(*) as allCount,
-  substring_index(group_concat(house_loader_id order by house_loader_id desc), ',', 3) as loader_id_egs, 
+  substring_index(group_concat(house_loader_id order by house_loader_id desc), ',', ". $this->constant->getExampleUrlCount().") as loader_id_egs, 
   substring_index(group_concat(property_url order by house_loader_id desc), ',', 1) as property_url_eg, 
   substring_index(group_concat(sitecode order by house_loader_id desc), ',', 1) as sitecode_eg
 from site_house 
@@ -51,7 +55,7 @@ group by 1;";
 
         $sql = "select SUBSTRING_INDEX(SUBSTRING_INDEX(replace(property_url, concat(substring_index(property_url, '//', 1), '//'), ''), '/', 1), '?', 1) as host,
   count(*) as allCount,
-  substring_index(group_concat(rental_loader_id order by rental_loader_id desc), ',', 3) as loader_id_egs, 
+  substring_index(group_concat(rental_loader_id order by rental_loader_id desc), ',', ". $this->constant->getExampleUrlCount().") as loader_id_egs, 
   substring_index(group_concat(property_url order by rental_loader_id desc), ',', 1) as property_url_eg, 
   substring_index(group_concat(sitecode order by rental_loader_id desc), ',', 1) as sitecode_eg
 from site_rental 

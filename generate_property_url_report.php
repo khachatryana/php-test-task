@@ -20,15 +20,21 @@ $user = $constants->getUser();
 $password = $constants->getPass();
 
 $connection = new Connection($user, $hosts, $password, $db);
-$mysqli = '';
-try {
-    $mysqli = $connection->connect();
-} catch (e $ex) {
-
-}
-$mysql = new Mysql($mysqli);
-$validation = new ValidationPropertyArgs();
 $log = new Log();
+$mysqli = $connection->connect();
+
+if ($mysqli -> connect_errno) {
+    $fileDir = 'logs/' . gmdate('Y-m-d:h:i:s \G\M\T', time()) . '.txt';
+    $log->setDir($fileDir);
+    $log->setLog("Failed to connect to MySQL: " . $mysqli -> connect_error);
+    $log->createLog();
+    trigger_error("Failed to connect to MySQL: " . $mysqli -> connect_error, E_USER_WARNING);
+    exit();
+}
+
+$mysql = new Mysql($mysqli, $constants);
+$validation = new ValidationPropertyArgs();
+
 switch ($argv[1]) {
     case "sales":
         $salesReport = new SalesReport($validation, $mysqli, $argv, $mysql, $log);
